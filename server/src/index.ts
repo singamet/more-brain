@@ -11,13 +11,7 @@ import { embedRoutes } from "./routes/embed";
 
 dotenv.config();
 const app = express();
-app.use(
-  cors({
-    origin: "http://localhost:5173", // or "*" temporarily
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
+app.use(cors());
 app.use(express.json());
 
 app.use((req, res, next) => {
