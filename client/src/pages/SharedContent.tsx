@@ -34,7 +34,7 @@ export default function MainContent() {
     );
   }
   return (
-    <div className="mb-4 flex h-full w-full flex-1 flex-col rounded bg-zinc-50/50 p-4 shadow-xl transition-all duration-300 dark:bg-zinc-800/50">
+    <div className="mb-4 flex h-full w-full flex-1 flex-col rounded-xl bg-zinc-50/50 p-4 shadow-xl transition-all duration-300 dark:bg-zinc-800/50">
       <div className="max-h-[calc(100vh-180px)] w-full overflow-y-auto py-4 ps-4 lg:max-h-[calc(100vh-240px)]">
         <div className="3xl:columns-4 columns-1 lg:columns-2 2xl:columns-3">
           {filteredContent.map((content) => (
