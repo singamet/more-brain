@@ -1,7 +1,16 @@
-import React, { memo, useEffect, useState } from "react";
-import DOMPurify from "dompurify";
+import { memo, useEffect } from "react";
 import { LinkIcon } from "@heroicons/react/16/solid";
 import { Link } from "react-router-dom";
+
+declare global {
+  interface Window {
+    twttr: {
+      widgets: {
+        load: () => void;
+      };
+    };
+  }
+}
 
 export default function Embed({ url }: { url: string }) {
   const parsedUrl = new URL(url);
@@ -84,53 +93,19 @@ const Youtube = memo(({ id }: { id: string }) => {
 });
 
 const Reddit = memo(({ url }: { url: string }) => {
-  const [redditData, setRedditData] = useState<{ html: string }>();
   useEffect(() => {
-    const fetchReddit = async (url: string) => {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/embed?url=${url}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("auth") as string}`,
-          },
-        },
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        setRedditData({ html: "<p>Post not found</p>" });
-        return;
-      }
-      // console.log(data.type);
-      setRedditData(data);
-    };
-    fetchReddit(url);
-  }, [url]);
-
-  useEffect(() => {
-    if (!redditData) return;
     const script = document.createElement("script");
-    script.src = "https://embed.reddit.com/widgets.js";
+    script.src = "https://embed.redditmedia.com/widgets/platform.js";
     script.async = true;
-
     document.body.appendChild(script);
 
-    script.onload = () => {
-      if (window.__REDDIT_EMBED) {
-        window.__REDDIT_EMBED.init();
-      }
-    };
-
     return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
+      document.body.removeChild(script);
     };
-  }, [redditData]);
-  const result = redditData?.html;
-  if (!redditData || !result) {
-    return <p>Loading...</p>;
-  }
-  const sanitizedHtml = DOMPurify.sanitize(result);
-  return <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div>;
+  }, []);
+  return (
+    <blockquote className="reddit-card" data-card-created="true">
+      <a href={url}>View Reddit Post</a>
+    </blockquote>
+  );
 });

@@ -7,7 +7,6 @@ import { contentRoutes } from "./routes/content";
 import { tagRoutes } from "./routes/tag";
 import { categoryRoutes } from "./routes/category";
 import cors from "cors";
-import { embedRoutes } from "./routes/embed";
 
 dotenv.config();
 const app = express();
@@ -22,7 +21,6 @@ app.use("/api/auth", userRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/tag", authMiddleware, tagRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/embed", authMiddleware, embedRoutes);
 app.use((req, res) => {
   res.status(400).json({ error: "Invalid Request" });
 });
